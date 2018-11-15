@@ -1,18 +1,11 @@
-const createStore = reducer => {
+const createStore = () => {
   let state;
   function dispatch(action) {
-    state = reducer(state, action);
+    state = changeCount(state, action);
     render();
   }
-
-  function getState() {
-    return state;
-  }
-  return { dispatch, getState };
+  return { dispatch };
 };
-
-let store = createStore(changeCount);
-store.dispatch({ type: "@@INIT" });
 
 function changeCount(state = { count: 0 }, action) {
   switch (action.type) {
@@ -26,11 +19,12 @@ function changeCount(state = { count: 0 }, action) {
 
 function render() {
   let container = document.getElementById("container");
-  container.textContent = store.getState().count;
+  container.textContent = state.count;
 }
 
+dispatch({ type: "@@INIT" });
 let button = document.getElementById("button");
 
 button.addEventListener("click", function() {
-  store.dispatch({ type: "INCREASE_COUNT" });
+  dispatch({ type: "INCREASE_COUNT" });
 });
